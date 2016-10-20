@@ -1,4 +1,5 @@
 #include <math.h>
+#include <iostream>
 #include "matrixop.h"
 /*
 *矩阵相乘
@@ -22,7 +23,6 @@ void m_x_m(double* a,int m,int n,double* b, int nn,int p,double* c) {
 *矩阵转置
 *将矩阵a转置为at
 *矩阵大小为m*n;
-*有问题 需要改！！！
 */
 void m_t(double* a, int m, int n, double* at) {
 	int i, j;
@@ -37,31 +37,51 @@ void m_t(double* a, int m, int n, double* at) {
 *使用LU分解的方法将矩阵转置
 */
 void m_inser(double* a, int n, double* a1) {
-
-	//double **out;
 	int i, j, k, x;
 	double s;
-	//out = (double**)malloc(n*sizeof(double*));
+	double** A = new double*[n];
+	double** A_ = new double*[n];
+	double** L = new double*[n];
+	double** U = new double*[n];
+	double** u = new double*[n];
+	double** r = new double*[n];
+	double** out = new double*[n];
+
+	for (int i = 0;i < n;i++) {
+		A[i] = new double[n];
+		A_[i] = new double[n];
+		L[i] = new double[n];
+		U[i] = new double[n];
+		u[i] = new double[n];
+		r[i] = new double[n];
+		out[i] = new double[n];
+	}
+
+	for (int i = 0;i < n;i++) {
+		for (int j = 0;j < n;j++) {
+			A_[i][j] = a[i*n + j];
+		}
+	}
+
 	for (i = 0; i < n; i++)
 	{
 		for (j = 0; j < n; j++)
 		{
 			A[i][j] = A_[i][j];
 			L[i][j] = 0;
-		}
-	}
-	for (i = 0; i < n; i++)
-	{
-		//out[i] = (double*)malloc(n*sizeof(double));
-		L[i][i] = 1;
-	}
-	for (i = 0;i<n;i++)
-		for (j = 0;j < n;j++) {
+			out[i][j] = 0;
 			U[i][j] = 0;
 			L[i][j] = 0;
 			u[i][j] = 0;
 			r[i][j] = 0;
 		}
+	}
+
+	for (i = 0; i < n; i++)
+	{
+		L[i][i] = 1;
+	}
+
 	//直接三角分解
 	//首先计算矩阵L的第1列，矩阵U的第1行
 	for (i = 0; i < n; i++)
@@ -90,7 +110,7 @@ void m_inser(double* a, int n, double* a1) {
 				L[i][x] = (A[i][x] - tmp2) / U[x][x];
 		}
 	}
-	/////////////////////求L和U矩阵的逆//////////////////////////////////////////
+/////////////////////////求L和U矩阵的逆//////////////////////////////////////////
 	for (i = 0; i<n; i++) /*求矩阵U的逆 */
 	{
 		u[i][i] = 1 / U[i][i];//对角元素的值，直接取倒数
@@ -111,14 +131,7 @@ void m_inser(double* a, int n, double* a1) {
 				r[k][i] = r[k][i] - L[k][j] * r[j][i];   //迭代计算，按列顺序依次得到每一个值
 		}
 	}
-	//////////将r和u相乘，得到逆矩阵
-	for (i = 0; i<n; i++)
-	{
-		for (j = 0; j<n; j++)
-		{
-			out[i][j] = 0;
-		}
-	}
+//////////////将r和u相乘，得到逆矩阵
 	for (i = 0; i<n; i++)
 	{
 		for (j = 0; j<n; j++)
@@ -129,4 +142,84 @@ void m_inser(double* a, int n, double* a1) {
 			}
 		}
 	}
+
+	for (int i = 0;i < n;i++)
+		for (int j = 0;j < n;j++)
+			a1[i*n + j] = out[i][j];
+	for (int i = 0;i < n;i++) {
+		delete[] A[i];
+		delete[] A_[i];
+		delete[] L[i];
+		delete[] U[i];
+		delete[] u[i];
+		delete[] r[i];
+		delete[] out[i];
+	}
+	delete A;
+	delete L;
+	delete U;
+	delete u;
+	delete r;
+	delete A_;
+	delete out;
+}
+/*
+*向量排序
+*将向量按照option的选择进行排序
+*保留数组索引
+*/
+void sort(double* pInArray,int nLen, int* pOutIndex) //ascending sequence
+{
+	int i, j, k;
+	for (int i = 0;i < nLen;i++)
+		pOutIndex[i] = i;
+	for (i = 0;i<nLen - 1;i++)
+		for (j = i+1;j<nLen;j++)
+			if (pInArray[pOutIndex[i]]<pInArray[pOutIndex[j]])
+			{
+				k = pOutIndex[i];
+				pOutIndex[i] = pOutIndex[j];
+				pOutIndex[j] = k;
+			}
+
+	for (i = 0;i<nLen;i++)
+		std::cout << pInArray[pOutIndex[i]] << '\t';
+	std::cout << std::endl;
+}
+/*
+*计算向量的模长
+*输入为向量a和长度n
+*/
+void norm(double * a, int n, double & norm)
+{
+	double sum = 0;
+	for (int i = 0;i < n;i++) {
+		sum += a[i] * a[i];
+	}
+	norm = sqrt(sum);
+}
+/*
+*矩阵与向量的乘积
+*输入：矩阵a大小为m*n，向量b长度为n，由于不能声明同名变量，长度声明为nn
+*输出：向量c长度为m，由于不能声明同名变量长度为mm
+*/
+void m_x_v(double* a, int m, int n, double* b, int nn, double* c, int mm) {
+	double  sum = 0;
+	for (int i = 0;i < m;i++) {
+		sum = 0;
+		for (int j = 0;j < n;j++) {
+			sum += a[i*n + j] * b[j];
+		}
+		c[i] = sum;
+	}
+}
+/*
+*向量相减
+*输入向量a大小为n，向量b大小为n
+*输出向量c大小为n
+*由于变量不能重名，所以取值分别为n，nn，nnn
+*/
+void s_s(double* a, int n, double* b, int nn, double* c, int nnn) {
+	for (int i = 0;i < n;i++)
+		c[i] = a[i] - b[i];
 }
