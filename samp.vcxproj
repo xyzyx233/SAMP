@@ -114,10 +114,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="matrixop.h" />
+    <ClInclude Include="sampop.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="matrixop.cpp" />
     <ClCompile Include="samp.cpp" />
+    <ClCompile Include="sampop.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

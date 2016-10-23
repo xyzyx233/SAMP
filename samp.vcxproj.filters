@@ -18,12 +18,18 @@
     <ClInclude Include="matrixop.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="sampop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="matrixop.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="samp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sampop.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

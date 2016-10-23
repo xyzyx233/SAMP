@@ -10,12 +10,15 @@ using namespace std;
 int main()
 {
 	//double* a = new double[3 * 3];
-	double a[6] = {1,2,3,4,5,6};
-	double c[2] = { 2,3 };
-	double* b = new double[3];
-	m_x_v(a,3,2,c,2,b,3);
-	for(int i=0;i<3;i++)
-		cout << b[i] << ' ';
+	double a[4] = {1,2,3,4};
+	double c[3] = { 1,4 };
+	double* b = new double[7];
+	set_m_col(a, 2, 2, c, 0);
+	for (int i = 0;i < 4;i++) {
+		cout << a[i] << ' ';
+		if ((i + 1) % 2 == 0)
+			cout << endl;
+	}
 	cout << endl;
     return 0;
 }

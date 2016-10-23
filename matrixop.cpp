@@ -1,10 +1,17 @@
 #include <math.h>
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include "matrixop.h"
+
+using namespace std;
+
 /*
 *矩阵相乘
-矩阵a乘矩阵b,结果为矩阵c
-矩阵a大小为m*n，矩阵b大小为n*p由于不能声明两个相同的变量所以将后者声明为nn*p
+*矩阵a乘矩阵b,结果为矩阵c
+*输入：矩阵a，大小为m*n，矩阵b，大小为n*p	由于不能声明两个相同的变量所以将后者声明为nn*p
+*输出：矩阵c，大小为m*p
+*全部使用数组表示
 */
 void m_x_m(double* a,int m,int n,double* b, int nn,int p,double* c) {
 	int i, j, k;
@@ -34,6 +41,7 @@ void m_t(double* a, int m, int n, double* at) {
 /*
 *方阵求逆
 *输入：方阵a，大小为n*n
+*输出：方阵at，用数组表示
 *使用LU分解的方法将矩阵转置
 */
 void m_inser(double* a, int n, double* a1) {
@@ -164,13 +172,16 @@ void m_inser(double* a, int n, double* a1) {
 	delete out;
 }
 /*
-*向量排序
-*将向量按照option的选择进行排序
-*保留数组索引
+*向量排序，保留数组索引
+*输入：向量pInArray，长度为nLen
+*输出：向量pOutIndex
 */
-void sort(double* pInArray,int nLen, int* pOutIndex) //ascending sequence
+void my_sort(double* pInArray,int nLen, int* pOutIndex) //ascending sequence
 {
 	int i, j, k;
+	for (int i = 0;i < nLen;i++) {
+		pInArray[i] = fabs(pInArray[i]);
+	}
 	for (int i = 0;i < nLen;i++)
 		pOutIndex[i] = i;
 	for (i = 0;i<nLen - 1;i++)
@@ -188,7 +199,8 @@ void sort(double* pInArray,int nLen, int* pOutIndex) //ascending sequence
 }
 /*
 *计算向量的模长
-*输入为向量a和长度n
+*输入：向量a，长度n
+*输出：norm
 */
 void norm(double * a, int n, double & norm)
 {
@@ -200,8 +212,8 @@ void norm(double * a, int n, double & norm)
 }
 /*
 *矩阵与向量的乘积
-*输入：矩阵a大小为m*n，向量b长度为n，由于不能声明同名变量，长度声明为nn
-*输出：向量c长度为m，由于不能声明同名变量长度为mm
+*输入：矩阵a，大小为m*n，向量b，长度为n，由于不能声明同名变量，长度声明为nn
+*输出：向量c，长度为m，由于不能声明同名变量长度为mm
 */
 void m_x_v(double* a, int m, int n, double* b, int nn, double* c, int mm) {
 	double  sum = 0;
@@ -215,11 +227,65 @@ void m_x_v(double* a, int m, int n, double* b, int nn, double* c, int mm) {
 }
 /*
 *向量相减
-*输入向量a大小为n，向量b大小为n
-*输出向量c大小为n
+*输入：向量a，大小为n，向量b，大小为n
+*输出：向量c，大小为n
 *由于变量不能重名，所以取值分别为n，nn，nnn
 */
 void s_s(double* a, int n, double* b, int nn, double* c, int nnn) {
 	for (int i = 0;i < n;i++)
 		c[i] = a[i] - b[i];
+}
+/*
+*向量求并集
+*输入：向量a、长度la、向量b、长度lb
+*输出：向量c
+*/
+bool compare(int a, int b)
+{
+	return a < b;  //从小到大排序
+}
+void s_u_s(int* a, int la, int* b, int lb,int* c) {
+	vector<int> v(la + lb);
+	vector<int>::iterator it;
+	sort(a,a+ la, compare);
+	sort(b, b + lb, compare);
+	for (int i = 0;i < la;i++)
+		cout << a[i] << ' ';
+	cout << endl;
+	for (int i = 0;i < lb;i++)
+		cout << b[i] << ' ';
+	cout <<endl;
+	it = set_union(a, a + la, b, b + lb, v.begin());
+	for (int i = 0;i < la + lb;i++) {
+		c[i] = v[i];
+	}
+}
+/*
+*提取矩阵中的一列
+*输入：矩阵a，大小为m*n，选取的列col
+*输出：向量b，长度为m
+*/
+void get_m_col(double* a, int m, int n, int col, double* b) {
+	for (int i = 0;i < m;i++) {
+		b[i] = a[i*n+col];
+	}
+}
+/*
+*向量为矩阵的列赋值
+*输入：矩阵a，大小为m*n，向量b，大小为m，赋值的列号col
+*/
+void set_m_col(double* a, int m, int n, double* b, int col) {
+	for (int i = 0;i < m;i++) {
+		a[i*n + col] = b[i];
+	}
+}
+/*
+*获取子串
+*输入：向量a，开始位置start，结束位置end
+*输出：向量b
+*/
+void get_s_sub(double * a, int start, int end,double* b)
+{
+	for (int i = start;i != end;i++)
+		b[i] = a[i];
 }
