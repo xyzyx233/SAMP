@@ -13,14 +13,14 @@ using namespace std;
 *输出：矩阵c，大小为m*p
 *全部使用数组表示
 */
-void m_x_m(double* a,int m,int n,double* b, int nn,int p,double* c) {
+void m_x_m(double* a,int m,int n,int realn,double* b, int nn,int p,int realp,double* c) {
 	int i, j, k;
 	double sum;
 	for (i = 0;i < m;i++) {
 		for (j = 0;j < p;j++) {
 			sum = 0;
 			for (k = 0;k < n;k++) {
-				sum += a[i*n+k] * b[k*p+j];
+				sum += a[i*realn+k] * b[k*realp+j];
 			}
 			c[i*p + j] = sum;
 		}
@@ -192,10 +192,10 @@ void my_sort(double* pInArray,int nLen, int* pOutIndex) //ascending sequence
 				pOutIndex[i] = pOutIndex[j];
 				pOutIndex[j] = k;
 			}
-
+/*
 	for (i = 0;i<nLen;i++)
 		std::cout << pInArray[pOutIndex[i]] << '\t';
-	std::cout << std::endl;
+	std::cout << std::endl;*/
 }
 /*
 *计算向量的模长
@@ -234,8 +234,7 @@ void m_x_v(double* a, int m, int n, double* b, int nn, double* c, int mm) {
 void s_s(double* a, int n, double* b, int nn, double* c, int nnn) {
 	for (int i = 0;i < n;i++)
 		c[i] = a[i] - b[i];
-}
-/*
+}/*
 *向量求并集
 *输入：向量a、长度la、向量b、长度lb
 *输出：向量c
@@ -244,21 +243,32 @@ bool compare(int a, int b)
 {
 	return a < b;  //从小到大排序
 }
-void s_u_s(int* a, int la, int* b, int lb,int* c) {
-	vector<int> v(la + lb);
+void s_u_s(int* aa, int la, int* bb, int lb,int* c,int& clen) {
+	vector<int> v(la + lb,-1);
 	vector<int>::iterator it;
+	int* b = new int[lb];
+	int* a = new int[la];
+	for (int i = 0;i < lb;i++) {
+		b[i] = bb[i];
+		a[i] = aa[i];
+	}
 	sort(a,a+ la, compare);
 	sort(b, b + lb, compare);
-	for (int i = 0;i < la;i++)
-		cout << a[i] << ' ';
-	cout << endl;
-	for (int i = 0;i < lb;i++)
-		cout << b[i] << ' ';
-	cout <<endl;
-	it = set_union(a, a + la, b, b + lb, v.begin());
-	for (int i = 0;i < la + lb;i++) {
+	//for (int i = 0;i < la;i++)
+	//	cout << a[i] << ' ';
+	//cout << endl;
+	//for (int i = 0;i < lb;i++)
+	//	cout << b[i] << ' ';
+	//cout <<endl;
+	set_union(a, a + la, b, b + lb, v.begin());
+	v.erase(unique(v.begin(), v.end()), v.end());
+	v.erase(remove(v.begin(), v.end(),-1),v.end());
+	clen=v.size();
+	for (int i = 0;i < clen;i++) {
 		c[i] = v[i];
 	}
+	delete(a);
+	delete(b);
 }
 /*
 *提取矩阵中的一列
@@ -284,8 +294,32 @@ void set_m_col(double* a, int m, int n, double* b, int col) {
 *输入：向量a，开始位置start，结束位置end
 *输出：向量b
 */
-void get_s_sub(double * a, int start, int end,double* b)
+void get_s_sub(int* a, int start, int end,int* b)
 {
-	for (int i = start;i != end;i++)
-		b[i] = a[i];
+	for (int i = start,j=0;i != end+1;i++,j++)
+		b[j] = a[i];
+}
+/*
+*获取合并后数组长度
+*输入：向量a，长度len
+*输出：向量最大下标,如果最小值为-1则去掉第一个值
+*/
+void get_last_zero(int * a, int len, int* x)
+{
+	int l = len;
+	if (a[0] == -1) {
+		for (int i = 1;i < l;i++) {
+			a[i - 1] = a[i];
+		}
+		l--;
+	}
+	for (int i = l;i >= 0;i--) {
+		if (a[i] != 0) {
+			*x = i;
+			return;
+		}
+	}
+}
+/*没用*/
+void m_fin(int lenofactiveaetnew,double* Aug_t,int m,int n,double* s,int sl,double* temp7,int ltemp7) {
 }

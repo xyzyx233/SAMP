@@ -1,3 +1,9 @@
 ﻿  samp.cpp
+g:\vc++\samp\samp.cpp(60): warning C4129: “o”: 不可识别的字符转义序列
+g:\vc++\samp\samp.cpp(70): warning C4129: “o”: 不可识别的字符转义序列
+g:\vc++\samp\samp.cpp(80): warning C4129: “p”: 不可识别的字符转义序列
+g:\vc++\samp\samp.cpp(90): warning C4129: “o”: 不可识别的字符转义序列
+g:\vc++\samp\samp.cpp(203): warning C4129: “o”: 不可识别的字符转义序列
+g:\vc++\samp\samp.cpp(213): warning C4129: “P”: 不可识别的字符转义序列
   samp.vcxproj -> G:\VC++\samp\Debug\samp.exe
   samp.vcxproj -> G:\VC++\samp\Debug\samp.pdb (Partial PDB)

@@ -21,6 +21,12 @@
     <ClInclude Include="sampop.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="prepare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BmpRot.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="matrixop.cpp">
@@ -30,6 +36,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="sampop.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="prepare.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
